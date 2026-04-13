@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revision For Final Exam - @truonggcong</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #f4f1de; /* Màu nền giấy vintage */
+            color: #1d1d1b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            max-width: 700px;
+            width: 100%;
+            border: 4px solid #1d1d1b;
+            box-shadow: 10px 10px 0px #e07a5f; /* Bóng đổ chuẩn Retro */
+            border-radius: 12px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px dashed #1d1d1b;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #e07a5f;
+            text-transform: uppercase;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 0px #1d1d1b;
+        }
+
+        .header p {
+            margin: 0;
+            font-weight: 600;
+            color: #3d405b;
+            font-size: 18px;
+        }
+
+        .badge {
+            background-color: #81b29a;
+            color: #fff;
+            padding: 5px 10px;
+            border: 2px solid #1d1d1b;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            transform: rotate(5deg);
+        }
+
+        .progress {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e07a5f;
+            margin-bottom: 15px;
+        }
+
+        .question-box {
+            font-size: 20px;
+            line-height: 1.6;
+            font-weight: 600;
+            margin-bottom: 20px;
+            background-color: #f2cc8f;
+            padding: 20px;
+            border: 3px solid #1d1d1b;
+            border-radius: 8px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 18px;
+            font-family: 'Space Grotesk', sans-serif;
+            border: 3px solid #1d1d1b;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            background-color: #e8f1f2;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #fff;
+            background-color: #3d405b;
+            border: 3px solid #1d1d1b;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 4px 4px 0px #1d1d1b;
+        }
+
+        button:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #1d1d1b;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .feedback {
+            display: none;
+            padding: 20px;
+            border: 3px solid #1d1d1b;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .feedback.correct {
+            display: block;
+            background-color: #81b29a;
+            color: #fff;
+        }
+
+        .feedback.incorrect {
+            display: block;
+            background-color: #e07a5f;
+            color: #fff;
+        }
+
+        .feedback h3 {
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        #next-btn {
+            display: none;
+            width: 100%;
+            background-color: #f2cc8f;
+            color: #1d1d1b;
+        }
+
+        .final-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .final-screen h2 {
+            color: #e07a5f;
+            font-size: 36px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="quiz-container">
+    <div class="badge">@truonggcong</div>
+    <div class="header">
+        <h1>Revision For Final Exam</h1>
+        <p>Friends Global 11</p>
+    </div>
+
+    <div id="quiz-content">
+        <div class="progress" id="progress">Question 1 / 25</div>
+        <div class="question-box" id="question-text">
+            </div>
+
+        <div class="input-area">
+            <input type="text" id="answer-input" placeholder="Nhập thì của động từ vào đây..." autocomplete="off">
+            <button id="submit-btn" onclick="checkAnswer()">Kiểm tra</button>
+        </div>
+
+        <div class="feedback" id="feedback-box">
+            <h3 id="feedback-title"></h3>
+            <p><strong>Đáp án đúng:</strong> <span id="correct-answer-text"></span></p>
+            <p><strong>Giải thích:</strong> <span id="explanation-text"></span></p>
+        </div>
+
+        <button id="next-btn" onclick="nextQuestion()">Tiếp tục 🚀</button>
+    </div>
+
+    <div class="final-screen" id="final-screen">
+        <h2>🎉 XUẤT SẮC! 🎉</h2>
+        <p>Chúc mừng các bạn đã hoàn thành trọn vẹn 25 câu ôn tập thì động từ!</p>
+        <p>Hãy xem lại các lỗi sai (nếu có) để chuẩn bị tốt nhất cho bài thi nhé.</p>
+        <button style="margin-top: 20px;" onclick="location.reload()">Làm lại từ đầu</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "1. Mary (establish) ____________ a successful tech startup to rival industry giants by the time she turns 30.", a: "will have established", ex: "Dấu hiệu 'by the time she turns 30' (trước một thời điểm trong tương lai) -> Dùng Tương lai hoàn thành." },
+        { q: "2. The orchestra (rehearse) ____________ the symphony when the power suddenly went out in the theatre.", a: "was rehearsing", ex: "Hành động đang diễn ra trong quá khứ ('was rehearsing') bị một hành động khác cắt ngang ('went out') -> Dùng Quá khứ tiếp diễn." },
+        { q: "3. He looks utterly exhausted; he (seek) ____________ investors for his new start-up all morning.", a: "has been seeking", ex: "Dấu hiệu 'all morning' và để lại dấu hiệu thấy rõ ở hiện tại 'looks utterly exhausted' -> Dùng Hiện tại hoàn thành tiếp diễn để nhấn mạnh quá trình." },
+        { q: "4. The famous portrait (steal) ____________ from the national gallery during the unexpected blackout last night.", a: "was stolen", ex: "Dấu hiệu 'last night' (quá khứ) và bức chân dung bị trộm (bị động) -> Dùng Quá khứ đơn bị động." },
+        { q: "5. A true artist rarely (conform) ____________ to society’s expectations when creating their masterpieces.", a: "conforms", ex: "Dấu hiệu 'rarely' diễn tả một thói quen, sự thật hiển nhiên -> Dùng Hiện tại đơn." },
+        { q: "6. Before the entrepreneur finally won the ‘Business of the Year’ award, he (overcome) ____________ numerous financial crises.", a: "had overcome", ex: "Hành động vượt qua khủng hoảng xảy ra TRƯỚC khi thắng giải ('won' - quá khứ) -> Dùng Quá khứ hoàn thành." },
+        { q: "7. Shh! A crucial negotiation (hold) ____________ in the boardroom to finalize the merger right now.", a: "is being held", ex: "Dấu hiệu 'right now' (hiện tại) và cuộc đàm phán được tổ chức (bị động) -> Dùng Hiện tại tiếp diễn bị động." },
+        { q: "8. Please don’t interrupt the CEO at 10 AM tomorrow. She (give) ____________ a keynote speech at the global summit.", a: "will be giving", ex: "Dấu hiệu 'at 10 AM tomorrow' (thời điểm xác định trong tương lai) -> Dùng Tương lai tiếp diễn." },
+        { q: "9. The young actress (undertake) ____________ several physically demanding roles to prove her versatility to the directors.", a: "has undertaken", ex: "Hành động đã xảy ra nhiều lần trong quá khứ ('several roles') nhưng không có thời gian xác định cụ thể, tính đến hiện tại -> Dùng Hiện tại hoàn thành." },
+        { q: "10. The sculptor (cast) ____________ the statue in bronze and proudly presented it to the museum curator.", a: "cast", ex: "Chuỗi hành động liên tiếp trong quá khứ ('cast' and 'presented'). Lưu ý động từ bất quy tắc: cast - cast - cast." },
+        { q: "11. Several innovative policies (implement) ____________ by the new manager to boost our company’s productivity so far.", a: "have been implemented", ex: "Dấu hiệu 'so far' (hiện tại hoàn thành) và chính sách được ban hành (bị động) -> Hiện tại hoàn thành bị động." },
+        { q: "12. Look at their intense expressions! The critics (debate) ____________ the true meaning behind her latest abstract exhibition.", a: "are debating", ex: "Dấu hiệu 'Look at...' (hành động đang xảy ra ngay lúc nói) -> Dùng Hiện tại tiếp diễn." },
+        { q: "13. The applicant (sweat) ____________ nervously while the interviewer was asking about his biggest career failure.", a: "was sweating", ex: "Hai hành động diễn ra song song trong quá khứ với từ nối 'while' -> Dùng Quá khứ tiếp diễn." },
+        { q: "14. The playwright (rewrite) ____________ the final act of the tragedy before the director starts the dress rehearsal.", a: "will have rewritten", ex: "Dấu hiệu 'before + mệnh đề HTĐ' mang nghĩa tương lai. Nhấn mạnh việc viết lại sẽ HOÀN TẤT trước khi đạo diễn bắt đầu -> Dùng Tương lai hoàn thành." },
+        { q: "15. The fragile sculpture suddenly slipped and broke into pieces while it (transfer) ____________ to the main exhibition hall.", a: "was being transferred", ex: "Dấu hiệu 'while + QKTD'. Bức tượng đang ĐƯỢC di chuyển (bị động) thì bị rơi -> Quá khứ tiếp diễn bị động." },
+        { q: "16. Look at the incredible amount of detail completed so far! The artisan (weave) ____________ this tapestry all morning without taking a single break.", a: "has been weaving", ex: "Dấu hiệu 'all morning' nhấn mạnh quá trình liên tục không ngừng nghỉ đến hiện tại -> Dùng Hiện tại hoàn thành tiếp diễn." },
+        { q: "17. Masterpieces (display) ____________ in this high-security section of the gallery to protect them from damage.", a: "are displayed", ex: "Diễn tả một sự thật hiển nhiên, trạng thái cố định ở bảo tàng. Chủ ngữ chỉ vật -> Dùng Hiện tại đơn bị động." },
+        { q: "18. The curtain will rise soon, and in just a few minutes, the actors (perform) ____________ under the dazzling spotlights.", a: "will be performing", ex: "Dấu hiệu 'in just a few minutes', dự đoán một hành động sẽ ĐANG diễn ra tại một thời điểm tương lai -> Tương lai tiếp diễn." },
+        { q: "19. The gallery owner was devastated because the best paintings (sell) ____________ to an anonymous collector before the opening night.", a: "had been sold", ex: "Tranh ĐÃ ĐƯỢC BÁN (bị động) TRƯỚC KHI chủ triển lãm sụp đổ ('was' - quá khứ) -> Dùng Quá khứ hoàn thành bị động." },
+        { q: "20. She realized she (misunderstand) ____________ the client’s complex requirements only after she submitted the proposal.", a: "had misunderstood", ex: "Hành động hiểu lầm xảy ra TRƯỚC khi cô ấy nhận ra ('realized' - quá khứ) -> Dùng Quá khứ hoàn thành." },
+        { q: "21. Ambitious people usually (strive) ____________ for excellence and rarely settle for mediocrity in their chosen fields.", a: "strive", ex: "Dấu hiệu 'usually' diễn tả thói quen, bản chất -> Dùng Hiện tại đơn." },
+        { q: "22. He is a typical high flyer; he (break) ____________ all the sales records in our agency.", a: "has broken", ex: "Diễn tả một thành tựu tính đến thời điểm hiện tại -> Dùng Hiện tại hoàn thành." },
+        { q: "23. The sponsor (withdraw) ____________ his funding at the last minute, leaving the theatre company in heavy debt.", a: "withdrew", ex: "Hành động đã xảy ra và chấm dứt trong quá khứ ('at the last minute' của một sự việc đã xong) -> Dùng Quá khứ đơn." },
+        { q: "24. The audience (applaud) ____________ loudly when the leading actress suddenly tripped on her costume.", a: "were applauding", ex: "Khán giả ĐANG vỗ tay thì nữ diễn viên vấp ngã ('tripped' - cắt ngang) -> Dùng Quá khứ tiếp diễn." },
+        { q: "25. I am completely confident that he (attain) ____________ his goal of becoming a senior pilot by the time he finishes his training program.", a: "will have attained", ex: "Dấu hiệu 'by the time + mệnh đề HTĐ' mang ý nghĩa tương lai -> Dùng Tương lai hoàn thành." }
+    ];
+
+    let currentIndex = 0;
+
+    const questionText = document.getElementById("question-text");
+    const answerInput = document.getElementById("answer-input");
+    const submitBtn = document.getElementById("submit-btn");
+    const feedbackBox = document.getElementById("feedback-box");
+    const feedbackTitle = document.getElementById("feedback-title");
+    const correctAnswerText = document.getElementById("correct-answer-text");
+    const explanationText = document.getElementById("explanation-text");
+    const nextBtn = document.getElementById("next-btn");
+    const progress = document.getElementById("progress");
+
+    function loadQuestion() {
+        // Reset UI
+        answerInput.value = "";
+        answerInput.disabled = false;
+        submitBtn.disabled = false;
+        feedbackBox.className = "feedback";
+        nextBtn.style.display = "none";
+        answerInput.focus();
+
+        // Load data
+        questionText.textContent = questions[currentIndex].q;
+        progress.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
+    }
+
+    function checkAnswer() {
+        const userAnswer = answerInput.value.trim().toLowerCase();
+        const correctAnswer = questions[currentIndex].a.toLowerCase();
+
+        if (userAnswer === "") {
+            alert("Em chưa nhập đáp án kìa!");
+            return;
+        }
+
+        answerInput.disabled = true;
+        submitBtn.disabled = true;
+        correctAnswerText.textContent = questions[currentIndex].a;
+        explanationText.textContent = questions[currentIndex].ex;
+
+        if (userAnswer === correctAnswer) {
+            feedbackBox.className = "feedback correct";
+            feedbackTitle.textContent = "✅ CHÍNH XÁC!";
+        } else {
+            feedbackBox.className = "feedback incorrect";
+            feedbackTitle.textContent = "❌ SAI RỒI BÉ ƠI!";
+        }
+
+        nextBtn.style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById("quiz-content").style.display = "none";
+            document.getElementById("final-screen").style.display = "block";
+        }
+    }
+
+    // Allow pressing Enter to submit
+    answerInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            if(!submitBtn.disabled) {
+                checkAnswer();
+            } else if (nextBtn.style.display === "block") {
+                nextQuestion();
+            }
+        }
+    });
+
+    // Init first question
+    loadQuestion();
+</script>
+
+</body>
+</html>

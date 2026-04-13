@@ -51,6 +51,7 @@
             border-radius: 8px;
             font-family: inherit;
             box-sizing: border-box;
+            font-size: 16px;
         }
 
         /* --- CSS CHO ĐỒNG HỒ ĐẾM GIỜ --- */
@@ -65,30 +66,48 @@
             font-size: 20px;
             box-shadow: 4px 4px 0px #1d1d1b;
             z-index: 100;
+            border-radius: 8px;
+        }
+
+        /* --- CSS CHO MÁY PHÁT NHẠC --- */
+        #music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border: 3px solid #1d1d1b;
+            box-shadow: 4px 4px 0px #1d1d1b;
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 100;
+            display: none; /* Sẽ hiện lên khi bấm Bắt đầu */
+            background: #fff;
         }
 
         .container {
             background-color: #fff;
-            max-width: 700px;
+            max-width: 750px;
             width: 90%;
             border: 4px solid #1d1d1b;
             box-shadow: 10px 10px 0px #e07a5f;
             border-radius: 12px;
             padding: 30px;
             display: none; /* Ẩn khi chưa nhập thông tin */
+            margin-top: 50px;
+            margin-bottom: 100px;
         }
 
         .header { text-align: center; border-bottom: 3px dashed #1d1d1b; padding-bottom: 20px; margin-bottom: 20px; }
         .header h1 { color: #e07a5f; margin: 0; }
 
-        .question-box { background: #f2cc8f; padding: 20px; border: 3px solid #1d1d1b; border-radius: 8px; font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+        .question-box { background: #f2cc8f; padding: 20px; border: 3px solid #1d1d1b; border-radius: 8px; font-size: 20px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; }
         
-        input[type="text"] { width: 100%; padding: 12px; border: 3px solid #1d1d1b; border-radius: 8px; font-size: 18px; margin-bottom: 15px; box-sizing: border-box; }
+        input[type="text"] { width: 100%; padding: 15px; border: 3px solid #1d1d1b; border-radius: 8px; font-size: 18px; margin-bottom: 15px; box-sizing: border-box; }
 
-        button { width: 100%; padding: 15px; font-size: 18px; font-weight: bold; background: #3d405b; color: #fff; border: 3px solid #1d1d1b; border-radius: 8px; cursor: pointer; box-shadow: 4px 4px 0px #1d1d1b; }
-        button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #1d1d1b; }
+        button { width: 100%; padding: 15px; font-size: 18px; font-weight: bold; background: #3d405b; color: #fff; border: 3px solid #1d1d1b; border-radius: 8px; cursor: pointer; box-shadow: 4px 4px 0px #1d1d1b; transition: all 0.2s; }
+        button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #1d1d1b; }
+        button:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
 
-        .feedback { display: none; padding: 15px; border: 3px solid #1d1d1b; border-radius: 8px; margin-top: 15px; font-weight: 600; }
+        .feedback { display: none; padding: 15px; border: 3px solid #1d1d1b; border-radius: 8px; margin-top: 15px; font-weight: 600; font-size: 18px; }
         .correct { background: #81b29a; color: white; }
         .incorrect { background: #e07a5f; color: white; }
     </style>
@@ -97,28 +116,30 @@
 
     <div id="timer-box">Time: 00:00</div>
 
+    <div id="music-player">
+        <iframe id="yt-iframe" width="250" height="80" src="" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+    </div>
+
     <div id="info-modal">
         <div class="modal-content">
             <h2>Welcome! 👋</h2>
             <p>Nhập thông tin để bắt đầu làm bài nhé!</p>
-            <input type="text" id="student-name" placeholder="Họ và Tên học sinh">
-            <input type="text" id="student-class" placeholder="Lớp (Ví dụ: 11A8)">
+            <input type="text" id="student-name" placeholder="Họ và Tên học sinh" autocomplete="off">
+            <input type="text" id="student-class" placeholder="Lớp (Ví dụ: 11A8)" autocomplete="off">
             <button onclick="startQuiz()">BẮT ĐẦU LÀM BÀI</button>
         </div>
     </div>
 
-    <iframe id="music-player" width="0" height="0" src="https://www.youtube.com/embed/Sshf4f66t00?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
-
     <div class="container" id="main-container">
         <div class="header">
             <h1>REVISION FOR FINAL EXAM</h1>
-            <p id="display-info" style="font-weight: bold; color: #3d405b;"></p>
+            <p id="display-info" style="font-weight: bold; color: #3d405b; font-size: 18px;"></p>
         </div>
 
         <div id="quiz-area">
-            <div class="progress" id="progress-text">Câu 1 / 25</div>
+            <div class="progress" id="progress-text" style="font-size: 18px; font-weight: bold; color: #e07a5f; margin-bottom: 10px;">Câu 1 / 25</div>
             <div class="question-box" id="question-text">Loading...</div>
-            <input type="text" id="user-answer" placeholder="Nhập đáp án của em...">
+            <input type="text" id="user-answer" placeholder="Nhập đáp án của em..." autocomplete="off">
             <button id="check-btn" onclick="checkAnswer()">KIỂM TRA</button>
             
             <div class="feedback" id="feedback-box"></div>
@@ -126,111 +147,60 @@
         </div>
 
         <div id="finish-area" style="display: none; text-align: center;">
-            <h2 style="color: #81b29a;">🎉 HOÀN THÀNH! 🎉</h2>
-            <p>Dữ liệu của em đã được gửi về cho @truonggcong.</p>
-            <p id="total-time-display"></p>
+            <h2 style="color: #81b29a; font-size: 36px;">🎉 HOÀN THÀNH! 🎉</h2>
+            <p style="font-size: 20px; font-weight: 600;">Dữ liệu của em đã được gửi về cho @truonggcong.</p>
+            <p id="total-time-display" style="font-size: 22px; color: #e07a5f; font-weight: bold;"></p>
+            <p style="color: #81b29a;">Em có thể đóng trang web này được rồi nhé!</p>
         </div>
     </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyAE6CV-mQgpMWdyoR06mzAZQ1RyBh5eMBR5eTvir-suR5Ci53Y4IaiIBRasSW4kp02/exec'; // <--- BÀ DÁN LINK GOOGLE APPS SCRIPT VÔ ĐÂY
+    // --- BÀ DÁN LINK GOOGLE APPS SCRIPT VÔ CÁI BIẾN NÀY NHA ---
+    const scriptURL = 'DÁN_URL_WEB_APP_CỦA_BÀ_VÀO_ĐÂY'; 
     
     let studentData = { name: "", className: "", startTime: "", endTime: "" };
     let startTimeObj, timerInterval;
     let currentIdx = 0;
 
+    // Full 25 câu hỏi thì động từ
     const questions = [
-        { q: "1. Mary (establish) ____________ a successful tech startup by the time she turns 30.", a: "will have established" },
-        { q: "2. The orchestra (rehearse) ____________ the symphony when the power went out.", a: "was rehearsing" }
-        // ... (Bà tự thêm 23 câu còn lại vào đây y chang định dạng này nha)
+        { q: "1. Mary (establish) ____________ a successful tech startup to rival industry giants by the time she turns 30.", a: "will have established" },
+        { q: "2. The orchestra (rehearse) ____________ the symphony when the power suddenly went out in the theatre.", a: "was rehearsing" },
+        { q: "3. He looks utterly exhausted; he (seek) ____________ investors for his new start-up all morning.", a: "has been seeking" },
+        { q: "4. The famous portrait (steal) ____________ from the national gallery during the unexpected blackout last night.", a: "was stolen" },
+        { q: "5. A true artist rarely (conform) ____________ to society’s expectations when creating their masterpieces.", a: "conforms" },
+        { q: "6. Before the entrepreneur finally won the ‘Business of the Year’ award, he (overcome) ____________ numerous financial crises.", a: "had overcome" },
+        { q: "7. Shh! A crucial negotiation (hold) ____________ in the boardroom to finalize the merger right now.", a: "is being held" },
+        { q: "8. Please don’t interrupt the CEO at 10 AM tomorrow. She (give) ____________ a keynote speech at the global summit.", a: "will be giving" },
+        { q: "9. The young actress (undertake) ____________ several physically demanding roles to prove her versatility to the directors.", a: "has undertaken" },
+        { q: "10. The sculptor (cast) ____________ the statue in bronze and proudly presented it to the museum curator.", a: "cast" },
+        { q: "11. Several innovative policies (implement) ____________ by the new manager to boost our company’s productivity so far.", a: "have been implemented" },
+        { q: "12. Look at their intense expressions! The critics (debate) ____________ the true meaning behind her latest abstract exhibition.", a: "are debating" },
+        { q: "13. The applicant (sweat) ____________ nervously while the interviewer was asking about his biggest career failure.", a: "was sweating" },
+        { q: "14. The playwright (rewrite) ____________ the final act of the tragedy before the director starts the dress rehearsal.", a: "will have rewritten" },
+        { q: "15. The fragile sculpture suddenly slipped and broke into pieces while it (transfer) ____________ to the main exhibition hall.", a: "was being transferred" },
+        { q: "16. Look at the incredible amount of detail completed so far! The artisan (weave) ____________ this tapestry all morning without taking a single break.", a: "has been weaving" },
+        { q: "17. Masterpieces (display) ____________ in this high-security section of the gallery to protect them from damage.", a: "are displayed" },
+        { q: "18. The curtain will rise soon, and in just a few minutes, the actors (perform) ____________ under the dazzling spotlights.", a: "will be performing" },
+        { q: "19. The gallery owner was devastated because the best paintings (sell) ____________ to an anonymous collector before the opening night.", a: "had been sold" },
+        { q: "20. She realized she (misunderstand) ____________ the client’s complex requirements only after she submitted the proposal.", a: "had misunderstood" },
+        { q: "21. Ambitious people usually (strive) ____________ for excellence and rarely settle for mediocrity in their chosen fields.", a: "strive" },
+        { q: "22. He is a typical high flyer; he (break) ____________ all the sales records in our agency.", a: "has broken" },
+        { q: "23. The sponsor (withdraw) ____________ his funding at the last minute, leaving the theatre company in heavy debt.", a: "withdrew" },
+        { q: "24. The audience (applaud) ____________ loudly when the leading actress suddenly tripped on her costume.", a: "were applauding" },
+        { q: "25. I am completely confident that he (attain) ____________ his goal of becoming a senior pilot by the time he finishes his training program.", a: "will have attained" }
     ];
 
     function startQuiz() {
         const name = document.getElementById('student-name').value;
         const cls = document.getElementById('student-class').value;
 
-        if(!name || !cls) { alert("Nhập đủ tên với lớp đi bé ơi!"); return; }
+        if(!name || !cls) { alert("Nhập đủ Tên với Lớp đi bé ơi!"); return; }
 
         studentData.name = name;
         studentData.className = cls;
         studentData.startTime = new Date().toLocaleString('vi-VN');
         startTimeObj = new Date();
 
-        document.getElementById('info-modal').style.display = 'none';
-        document.getElementById('main-container').style.display = 'block';
-        document.getElementById('display-info').innerText = `${name} - ${cls}`;
-
-        // Chạy nhạc
-        const player = document.getElementById('music-player');
-        player.src += "&autoplay=1";
-
-        startTimer();
-        loadQuestion();
-    }
-
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            const now = new Date();
-            const diff = Math.floor((now - startTimeObj) / 1000);
-            const m = Math.floor(diff / 60).toString().padStart(2, '0');
-            const s = (diff % 60).toString().padStart(2, '0');
-            document.getElementById('timer-box').innerText = `Time: ${m}:${s}`;
-        }, 1000);
-    }
-
-    function loadQuestion() {
-        document.getElementById('user-answer').value = "";
-        document.getElementById('feedback-box').style.display = 'none';
-        document.getElementById('next-btn').style.display = 'none';
-        document.getElementById('check-btn').style.display = 'block';
-        
-        document.getElementById('progress-text').innerText = `Câu ${currentIdx + 1} / ${questions.length}`;
-        document.getElementById('question-text').innerText = questions[currentIdx].q;
-    }
-
-    function checkAnswer() {
-        const userVal = document.getElementById('user-answer').value.trim().toLowerCase();
-        const correctVal = questions[currentIdx].a.toLowerCase();
-        const fb = document.getElementById('feedback-box');
-
-        fb.style.display = 'block';
-        if(userVal === correctVal) {
-            fb.innerText = "✅ CHÍNH XÁC!";
-            fb.className = "feedback correct";
-        } else {
-            fb.innerText = `❌ SAI RỒI! Đáp án đúng: ${questions[currentIdx].a}`;
-            fb.className = "feedback incorrect";
-        }
-        document.getElementById('check-btn').style.display = 'none';
-        document.getElementById('next-btn').style.display = 'block';
-    }
-
-    function loadNext() {
-        currentIdx++;
-        if(currentIdx < questions.length) {
-            loadQuestion();
-        } else {
-            finishQuiz();
-        }
-    }
-
-    function finishQuiz() {
-        clearInterval(timerInterval);
-        studentData.endTime = new Date().toLocaleString('vi-VN');
-        
-        document.getElementById('quiz-area').style.display = 'none';
-        document.getElementById('finish-area').style.display = 'block';
-        document.getElementById('total-time-display').innerText = `Thời gian làm bài: ${document.getElementById('timer-box').innerText}`;
-
-        // GỬI DỮ LIỆU QUA GOOGLE SHEET
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            cache: 'no-cache',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(studentData)
-        }).then(() => console.log("Đã lưu vào Sheet thành công!"));
-    }
-</script>
-</body>
-</html>
+        // Ẩn hộp thoại, hiện khung làm bài
+        document.getElementById('info-modal').style.display = 'none
